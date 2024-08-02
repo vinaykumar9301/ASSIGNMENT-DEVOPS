@@ -1,15 +1,10 @@
-name: CI/CD
-
-on:
-  push:
-    branches: [ main ]
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Check out the repository
+      uses: actions/checkout@v2
 
     - name: Make scripts executable
       run: |
@@ -25,13 +20,12 @@ jobs:
       run: node -v
 
     - name: Run setup script
-      run: ./scripts/setup.sh
+      run: |
+        set -e
+        ./scripts/setup.sh
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-    - name: Check setup script output
-      run: cat setup.log || true
 
     - name: Install dependencies
       run: npm ci --verbose
