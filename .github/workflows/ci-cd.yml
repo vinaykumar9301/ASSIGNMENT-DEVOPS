@@ -11,6 +11,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Make scripts executable
+      run: |
+        chmod +x scripts/setup.sh
+        chmod +x scripts/deploy.sh
+
     - name: Run setup script
       run: ./scripts/setup.sh
 
@@ -30,11 +35,8 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-    - name: Install pip
-      run: sudo apt-get install -y python3-pip
-
     - name: Install Elastic Beanstalk CLI
-      run: pip3 install awsebcli --upgrade --user
+      run: pip install awsebcli
 
     - name: Deploy to AWS Elastic Beanstalk
       run: ./scripts/deploy.sh
